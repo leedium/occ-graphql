@@ -71,7 +71,7 @@ app.use(`${constants.ROUTE_BASE}/graph`, graphqlHTTP(
   {
     schema: schema,
     rootValue: root,
-    graphiql: false
+    graphiql: true
   }
 ));
 
