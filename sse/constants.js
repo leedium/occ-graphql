@@ -15,12 +15,12 @@
  * @description constants
  **/
 module.exports = {
-  SSE_NAME: 'starter',
+  SSE_NAME: 'occgraphql',
   SSE_VERSION: '1',
   TEST_FOLDER: 'tests',
   NODE_EXTENSION_SERVER_PORT: 11372,
   NODE_EXTENSION_TEST_PORT: 3099,
-  ROUTE_BASE: '/v1/starter',
+  ROUTE_BASE: '/v1/occgraphql',
   //
   HTTP_METHOD_GET: 'GET',
   HTTP_METHOD_POST: 'POST',
@@ -51,8 +51,7 @@ module.exports = {
   NODE_ENV_DEVELOPMENT: 'development',
   NODE_ENV_TEST: 'test',
   //
-  SAY_HELLO: '/servicebasic/sayHello',
-  GET_PLANETS: '/serviceexternal/getPlanet',
+  GRAPHQL_SECURE: '/secure',
   //
   OCC_ENV_PREVIEW: 'preview',
   //

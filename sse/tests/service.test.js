@@ -48,11 +48,11 @@ describe('====== Utility Routes ======', function () {
       });
   }).timeout(TEST_TIMEOUT);
 
-  it(`- Returns a valid message \n\t${constants.SAY_HELLO} \n\t- original search string\n\t- result object\n\t\t-- status\n\t\t-- response\n`, function (done) {
+  it(`- Returns a valid message \n\t${constants.GRAPHQL_SECURE} \n\t- original search string\n\t- result object\n\t\t-- status\n\t\t-- response\n`, function (done) {
     global.testMode = false;
     let payload = readJSONFile(`../${constants.TEST_FOLDER}/json/serviceBasic-test-req.json`);
     supertest(app)
-      .post(`${constants.ROUTE_BASE}${constants.SAY_HELLO}`)
+      .post(`${constants.ROUTE_BASE}${constants.GRAPHQL_SECURE}`)
       .set({'env': 'preview'})
       .send(payload)
       .expect(constants.HTTP_STATUS_SUCCESS)
@@ -63,23 +63,6 @@ describe('====== Utility Routes ======', function () {
         }
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be('hello LEEDIUM');
-        done();
-      });
-  }).timeout(TEST_TIMEOUT);
-
-  it(`- Returns Planet 'Tatooine' \n\t${constants.GET_PLANETS} \n`, function (done) {
-    global.testMode = false;
-    supertest(app)
-      .post(`${constants.ROUTE_BASE}${constants.GET_PLANETS}`)
-      .set({'env': 'preview'})
-      .expect(constants.HTTP_STATUS_SUCCESS)
-      .end(function (err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res.body).to.have.property('name');
-        expect(res.body.name).to.be('Tatooine');
         done();
       });
   }).timeout(TEST_TIMEOUT);

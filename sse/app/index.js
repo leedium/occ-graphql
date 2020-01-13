@@ -16,14 +16,14 @@
  **/
 
 const nconf = require('nconf');
+const graphqlHTTP = require('express-graphql');
+const graphql = require('graphql');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
 const http = require('http');
 const HttpsProxyAgent = require('https-proxy-agent');
-const graphqlHTTP = require ('express-graphql');
-const {buildSchema} = require('graphql');
 
 const constants = require('../constants');
 const routeMap = require('./routes/routeMap');
@@ -39,23 +39,7 @@ global.httpsRequest = https;
 const router = express.Router();
 const app = express();
 
-const schema = buildSchema(`type Query {
-  hello: String
-}`);
 
-const root = {
-  hello: () => {
-    return 'hello world'
-  }
-}
-
-app.use('/graphql', graphqlHTTP(
-  {
-    schema: schema,
-    rootValue: root,
-    graphiql: true
-  }
-))
 
 // Cors
 let corsOptions = {
@@ -71,6 +55,26 @@ let corsOptions = {
   optionsSuccessStatus: constants.HTTP_STATUS_SUCCESS,
   preflightContinue: true
 };
+
+
+const schema = graphql.buildSchema(`type Query {
+  hello: String
+}`);
+
+const root = {
+  hello: () => {
+    return 'hello world';
+  }
+};
+
+app.use(`${constants.ROUTE_BASE}/graph`, graphqlHTTP(
+  {
+    schema: schema,
+    rootValue: root,
+    graphiql: false
+  }
+));
+
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 

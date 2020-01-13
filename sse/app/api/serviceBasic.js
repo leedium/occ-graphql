@@ -18,7 +18,7 @@
 const SuccessResponse = require('../dataTypes/responseType').SuccessResponse;
 
 class ServiceBasic {
-  static sayHello (req) {
+  static graphql (req) {
     return new Promise((resolve) => {
       resolve(SuccessResponse({message: `hello ${req.body.name}`}));
     });

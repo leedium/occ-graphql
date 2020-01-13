@@ -24,7 +24,7 @@ const nconf = require('nconf');
 const Route = require('./route');
 const constants = require('../../constants');
 const serviceBasic = require('../api/serviceBasic');
-const serviceExternalRequestApi = require('../api/serviceExternalRequestApi');
+// const serviceExternalRequestApi = require('../api/serviceExternalRequestApi');
 
 let corsOptions = {
   origin: '*',
@@ -51,15 +51,15 @@ let corsOptions = {
 
 let routeMap = function (router) {
   router.options('/*', cors(corsOptions));
+
   router.get('/version', cors(corsOptions), (req, res) => {
     const {logger} = res.locals;
     logger.debug(`#######################${process.env['hc_hostUrl']}###########################`);
     res.status(constants.HTTP_STATUS_SUCCESS).json({
       'version': `${constants.SSE_NAME}`,
       'node_version': process.version,
-      'nconf': nconf
-      // 'hc_hostUrl': process.env['hc_hostUrl'],
-      // 'env_var1': process.env['env_var1']
+      'nconf': nconf,
+      'process': process.env['testVar1']
     });
   });
 
@@ -80,19 +80,25 @@ let routeMap = function (router) {
   new Route({
     router,
     method: constants.HTTP_METHOD_POST,
-    route: constants.SAY_HELLO,
-    api: serviceBasic.sayHello,
-    testReq: 'serviceBasic-test-req.json',
-    testRes: 'serviceBasic-test-res.json'
+    route: constants.GRAPHQL_SECURE,
+    api: serviceBasic.graphql
   });
-  new Route({
-    router,
-    method: constants.HTTP_METHOD_POST,
-    route: constants.GET_PLANETS,
-    api: serviceExternalRequestApi.getPlanet,
-    testReq: 'test2-req.json',
-    testRes: 'test2-res.json'
-  });
+  // new Route({
+  //   router,
+  //   method: constants.HTTP_METHOD_POST,
+  //   route: constants.SAY_HELLO,
+  //   api: serviceBasic.sayHello,
+  //   testReq: 'serviceBasic-test-req.json',
+  //   testRes: 'serviceBasic-test-res.json'
+  // });
+  // new Route({
+  //   router,
+  //   method: constants.HTTP_METHOD_POST,
+  //   route: constants.GET_PLANETS,
+  //   api: serviceExternalRequestApi.getPlanet,
+  //   testReq: 'test2-req.json',
+  //   testRes: 'test2-res.json'
+  // });
 
   return router;
 };

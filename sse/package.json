@@ -1,5 +1,5 @@
 {
-  "name": "occ-sse-starter",
+  "name": "occ-graphql",
   "version": "1.1.0",
   "description": "Starter to help build and deploy Server Side Extensions to Oracle Commerce Cloud",
   "main": "app/index.js",
@@ -21,7 +21,7 @@
     "package:shx:lstmp": "shx ls",
     "package:clean:npm": "npm uninstall --save-dev eslint esslint-config-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-standard expect.js mocha form-data nconf nodemon supertest yargs",
     "deploy": "npm-run-all eslint test:nowatch package:shx:mkdir package:shx:copytmp package:shx:cdtmp",
-    "package:zip": "bestzip starter-sse.zip ./* -x \"*.DS_Store\"",
+    "package:zip": "bestzip occgraphql-sse.zip ./* -x \"*.DS_Store\"",
     "package:deploy": "npm-run-all eslint package:init package:clean package:zip package:upload",
     "package:deploy:no:eslint:test": "npm-run-all package:init package:clean package:zip package:upload",
     "package:upload": "node core/deploy.js --token=$TOKEN"
@@ -36,7 +36,7 @@
   "bugs": {
     "url": "https://github.com/leedium/occ-sse-starter/issues"
   },
-  "homepage": "https://github.com/leedium/occ-sse-starter",
+  "homepage": "https://github.com/leedium/occ-graphql",
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
@@ -46,7 +46,9 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0",
     "expect.js": "^0.3.1",
+    "express-graphql": "^0.9.0",
     "form-data": "^2.3.2",
+    "graphql": "^14.5.8",
     "mocha": "^5.1.1",
     "nconf": "^0.10.0",
     "nodemon": "^1.17.4",
@@ -60,8 +62,6 @@
     "cors": "2.8.4",
     "cross-env": "5.1.5",
     "express": "4.16.3",
-    "express-graphql": "^0.9.0",
-    "graphql": "^14.5.8",
     "https-proxy-agent": "2.2.1",
     "npm-run-all": "4.1.3",
     "request": "2.86.0",
@@ -70,23 +70,29 @@
   },
   "publicUrls": [
     "/ccstorex/custom/v1/",
-    "/ccstorex/custom/v1/starter/version",
-    "/ccstorex/custom/v1/starter/servicebasic/sayHello",
-    "/ccstorex/custom/v1/starter/serviceexternal/getPlanet"
+    "/ccstorex/custom/v1/occgraphql/version",
+    "/ccstorex/custom/v1/occgraphql/test",
+    "/ccstorex/custom/v1/occgraphql/graph"
   ],
   "authenticatedUrls": [
     {
-      "url": "/ccstorex/custom/v1/starter/authenticatedUrl",
+      "url": "/ccstorex/custom/v1/occgraphql/authenticatedUrl",
       "method": [
         "get"
+      ]
+    },
+    {
+      "url": "/ccstorex/custom/v1/occgraphql/secure",
+      "method": [
+        "post"
       ]
     }
   ],
   "translations": [
     {
       "language": "en_US",
-      "description": "Starter kit to build andd deploy Serrver Side Extensions to an Oracle Commerce Cloud Instance",
-      "name": "OCC SSE Starter"
+      "description": "Testing graphql with occ",
+      "name": "OCC GRAPH QL"
     }
   ]
 }
