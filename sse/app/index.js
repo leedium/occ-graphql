@@ -6,7 +6,7 @@
  */
 
 /**
- * @project occ-sse-starter
+ * @project occ-graphql
  * @file index.js
  * @company leedium
  * @createdBy davidlee
@@ -17,7 +17,7 @@
 
 const nconf = require('nconf');
 const graphqlHTTP = require('express-graphql');
-const graphql = require('graphql');
+const {buildSchema} = require('graphql');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -39,8 +39,6 @@ global.httpsRequest = https;
 const router = express.Router();
 const app = express();
 
-
-
 // Cors
 let corsOptions = {
   origin: [
@@ -56,24 +54,39 @@ let corsOptions = {
   preflightContinue: true
 };
 
+const schema = buildSchema(`
+  type Query {
+    myName: String
+    rollDice(numDice: Int!, numSides: Int): [Int]
+  }
+`);
 
-const schema = graphql.buildSchema(`type Query {
-  hello: String
-}`);
-
-const root = {
-  hello: () => {
-    return 'hello world';
+var root = {
+  myNAme: () => {
+    return 'David Lee';
+  },
+  quoteOfTheDay: () => {
+    return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
+  },
+  random: () => {
+    return Math.random();
+  },
+  rollThreeDice: () => {
+    return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
+  },
+  rollDice: ({numDice, numSides}) => {
+    var output = [];
+    for (var i = 0; i < numDice; i++) {
+      output.push(1 + Math.floor(Math.random() * (numSides || 6)));
+    }
+    return output;
   }
 };
 
-app.use(`${constants.ROUTE_BASE}/graph`, graphqlHTTP(
-  {
-    schema: schema,
-    rootValue: root,
-    graphiql: true
-  }
-));
+const testMiddleware = (req, res, next) => {
+  console.log(res.headers);
+  next();
+};
 
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
@@ -88,9 +101,18 @@ if (global.logging) {
     next();
   });
 }
+app.use(testMiddleware);
+app.use(`${constants.ROUTE_BASE}/graph`, graphqlHTTP(
+  {
+    schema: schema,
+    rootValue: root,
+    graphiql: true
+  }
+));
 
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
+
 //  Route references
 app.use(constants.ROUTE_BASE, routeMap(router));
 

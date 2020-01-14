@@ -11,7 +11,7 @@
  * @type {*|createApplication}
  */
 /**
- * @project occ-sse-starter
+ * @project occ-graphql
  * @file route.js
  * @company leedium
  * @createdBy davidlee

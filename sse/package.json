@@ -19,7 +19,7 @@
     "package:shx:copytmp": "shx cp -r . ../tmp",
     "package:shx:cdtmp": "cd ../tmp && shx rm -rf node_modules && shx rm -rf tests && rm index.js && npm i --production && npm run package:deploy:no:eslint:test && cd .. && shx rm -rf ./tmp",
     "package:shx:lstmp": "shx ls",
-    "package:clean:npm": "npm uninstall --save-dev eslint esslint-config-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-standard expect.js mocha form-data nconf nodemon supertest yargs",
+    "package:clean:npm": "npm uninstall --save-dev express body-parser eslint esslint-config-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-standard expect.js mocha form-data nconf nodemon supertest yargs",
     "deploy": "npm-run-all eslint test:nowatch package:shx:mkdir package:shx:copytmp package:shx:cdtmp",
     "package:zip": "bestzip occgraphql-sse.zip ./* -x \"*.DS_Store\"",
     "package:deploy": "npm-run-all eslint package:init package:clean package:zip package:upload",
@@ -29,15 +29,16 @@
   "postinstall": "echo done",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leedium/occ-sse-starter.git"
+    "url": "git+https://github.com/leedium/occ-graphql.git"
   },
   "author": "LEEDIUM",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/leedium/occ-sse-starter/issues"
+    "url": "https://github.com/leedium/occ-graphql/issues"
   },
   "homepage": "https://github.com/leedium/occ-graphql",
   "devDependencies": {
+    "body-parser": "1.18.3",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
@@ -45,6 +46,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0",
+    "express": "4.16.3",
     "form-data": "^2.3.2",
     "mocha": "^5.1.1",
     "nconf": "^0.10.0",
@@ -55,11 +57,9 @@
   "dependencies": {
     "axios": "0.18.0",
     "bestzip": "1.1.4",
-    "body-parser": "1.18.3",
     "cors": "2.8.4",
     "cross-env": "5.1.5",
     "expect.js": "^0.3.1",
-    "express": "4.16.3",
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8",
     "https-proxy-agent": "2.2.1",

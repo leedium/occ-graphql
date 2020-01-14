@@ -6,7 +6,7 @@
  */
 
 /**
- * @project occ-sse-starter
+ * @project occ-graphql
  * @file apiRequest.js
  * @company leedium
  * @createdBy davidlee

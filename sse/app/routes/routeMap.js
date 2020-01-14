@@ -8,7 +8,7 @@
 /* eslint no-new: 0 */
 
 /**
- * @project occ-sse-starter
+ * @project occ-graphql
  * @file routeMap.js
  * @company leedium
  * @createdBy davidlee
@@ -59,6 +59,7 @@ let routeMap = function (router) {
       'version': `${constants.SSE_NAME}`,
       'node_version': process.version,
       'nconf': nconf,
+      'headers': req.headers,
       'process': process.env['testVar1']
     });
   });
