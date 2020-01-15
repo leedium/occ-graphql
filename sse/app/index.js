@@ -17,7 +17,7 @@
 
 const nconf = require('nconf');
 const graphqlHTTP = require('express-graphql');
-const {buildSchema} = require('graphql');
+const {buildSchema, GraphQLSchema,GraphQLList, GraphQLObjectType, GraphQLString} = require('graphql');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -32,6 +32,12 @@ const proxy = process.env.http_proxy || nconf.get('general:proxy-server');
 if (typeof proxy !== 'undefined') {
   global['agent'] = new HttpsProxyAgent(proxy);
 }
+
+const {GraphQLSchema} = require('graphql');
+
+export default new GraphQLSchema({
+  query: QueryType
+})
 
 global.httpRequest = http;
 global.httpsRequest = https;
