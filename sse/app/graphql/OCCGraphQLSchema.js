@@ -1,37 +1,45 @@
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-import {GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLString} from 'graphql';
-import ProductType from './types/ProductType';
+const {GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLString} = require('graphql');
+const ProductType = require('./types/ProductType');
 
 const BASE_URL = 'https://ccstore-z4ma.oracleoutsourcing.com/ccstore/v1';
 
 function fetchResponseByURl (path) {
-  return fetch(`${BASE_URL}/${path}`)
+  return fetch(`${BASE_URL}${path}`, {
+    headers: {
+      'Authorization': 'Basic YWRtaW46VGVzdGVzdDExJSU='
+    }
+  })
     .then(res => res.json());
 }
 
-function getProduct(id) {
+function listProducts () {
+  return fetchResponseByURl('/products');
+}
+
+function getProduct (id) {
   return fetchResponseByURl(`/products/${id}`);
 }
 
-const QueryType = new GraphQLObjectType({
+const OccRootQuery = new GraphQLObjectType({
   name: 'Query',
   description: 'Main for all queries',
   fields: () => ({
     listProducts: {
       type: new GraphQLList(ProductType),
-      resolve: root => ({})
+      resolve: root => listProducts()
     },
-    getProduct: new GraphQLObjectType({
+    getProduct: {
       type: ProductType,
       args: {
-        id: {type: GraphQLString},
-        resolve: (root, {id}) => getProduct(id)
-      }
-    })
+        id: {type: GraphQLString}
+      },
+      resolve: (root, {id}) => getProduct(id)
+    }
   })
 });
 
-export default new GraphQLSchema({
-  query: QueryType
+module.exports = new GraphQLSchema({
+  query: OccRootQuery
 });

@@ -17,7 +17,6 @@
 
 const nconf = require('nconf');
 const graphqlHTTP = require('express-graphql');
-const {buildSchema, GraphQLSchema,GraphQLList, GraphQLObjectType, GraphQLString} = require('graphql');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -25,6 +24,7 @@ const https = require('https');
 const http = require('http');
 const HttpsProxyAgent = require('https-proxy-agent');
 
+const OCCSchema = require('./graphql/OCCGraphQLSchema');
 const constants = require('../constants');
 const routeMap = require('./routes/routeMap');
 
@@ -32,12 +32,6 @@ const proxy = process.env.http_proxy || nconf.get('general:proxy-server');
 if (typeof proxy !== 'undefined') {
   global['agent'] = new HttpsProxyAgent(proxy);
 }
-
-const {GraphQLSchema} = require('graphql');
-
-export default new GraphQLSchema({
-  query: QueryType
-})
 
 global.httpRequest = http;
 global.httpsRequest = https;
@@ -58,35 +52,6 @@ let corsOptions = {
   ],
   optionsSuccessStatus: constants.HTTP_STATUS_SUCCESS,
   preflightContinue: true
-};
-
-const schema = buildSchema(`
-  type Query {
-    myName: String
-    rollDice(numDice: Int!, numSides: Int): [Int]
-  }
-`);
-
-var root = {
-  myNAme: () => {
-    return 'David Lee';
-  },
-  quoteOfTheDay: () => {
-    return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
-  },
-  random: () => {
-    return Math.random();
-  },
-  rollThreeDice: () => {
-    return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
-  },
-  rollDice: ({numDice, numSides}) => {
-    var output = [];
-    for (var i = 0; i < numDice; i++) {
-      output.push(1 + Math.floor(Math.random() * (numSides || 6)));
-    }
-    return output;
-  }
 };
 
 const testMiddleware = (req, res, next) => {
@@ -110,8 +75,7 @@ if (global.logging) {
 app.use(testMiddleware);
 app.use(`${constants.ROUTE_BASE}/graph`, graphqlHTTP(
   {
-    schema: schema,
-    rootValue: root,
+    schema: OCCSchema,
     graphiql: true
   }
 ));
