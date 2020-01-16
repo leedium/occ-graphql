@@ -29,12 +29,7 @@ Add white listed Card Provider endpoints via OCC API to allow [CORS](http://docs
 }
 ```
 
-## Routes
-
-#### Sample Routes
-
 ## Secure endpoints
-
 For access to external resources from SSE, copy all X509 PEM Certificates(.pem | .crt) files to the following folder
 ``
 /ssl
@@ -122,56 +117,27 @@ Open the SSE specific url in the browser  {OCC Instance}/ccstorex/custom/v1/{SSE
     "node_version": "v8.11.1"
 }
 ```
-#### Use [occ-route-tester](https://github.com/leedium/occ-widgets/tree/master/widgets/sseRouteTester "Occ Route Tester") to test the endpoints in real-time in the occ preview-admin or storefront.
-```
-//example for occ-sse-tester
-method: POST
-path: starter/serviceexternal/getPlanet
-JSON: {"planetId":"1"}
-```
 
+## GraphQL Testing
+Once the sse is validated installed, go to the following url which with load Graphiql
+`https://ccadmin-z4ma.oracleoutsourcing.com/ccstorex/custom/v1/occgraphql/graph`
 
-## Generate an Auth token for postman
-```
-$ npm run token
-```
-
-
-## Requesting SSE fom client side
-Please add the following to the header requests:
-
-```
-//  Insecure Endpoint
-headers:{
-    'env': 'preview',  //Boolean indicating mode ex:  [ 'preview' | 'storefront' ]
-    'hc-page': widget.pageContext().page.name, // name of the page requesting resource ex: ['home']
-    'Content-Type': 'application/json' // Content Type of the payload
+Execute the following Query
+```$xslt
+{
+  getProduct(id:"{A_PRODUCT_ID") {
+    id
+    displayName
+    longDescription
+  }
 }
-
-//  Secure Endpoint
-//  ...same as above but add users authenticated occ token
-
-    'Authorization': 'Bearer ' + ccRestClient.tokenSecret
-
-
-// Example request from JS using Jquery Ajax
-$.ajax({
-    method: 'POST',
-    dataType: 'json',
-    url: '/ccstorex/custom/v1/{SSE_NAME}/{YOUR_ENDPOINT}',
-    withCredentials: true,
-    data: JSON.stringify({somePayload:'some payloadd'}),
-    headers: {
-        'Authorization': 'Bearer ' + ccRestClient.tokenSecret,
-        'env': 'preview'
-        'hc-page': widget.pageContext().page.name,
-        'Content-Type': 'application/json'
-    }
-})
-.done(function (res) {})
-.fail(function (err) {});
-
 ```
+
+
+## Related
+ [occ-shared-resource-bundle](https://github.com/leedium/occ-shared-resource-bundle "occ-shared-resource-bundle")
+ [occ-react-component](https://github.com/leedium/occ-react-component "OCC React Component")
+
 
 <br/><br/><br/>
 ### Disclaimer of Warranty.
